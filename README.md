@@ -1,2 +1,13 @@
 # Acorn
 A simple interpreted programming language builded upon Python. 
+
+How to run: <i>python3 Scanner.py \<acornfile.acorn\> </i> An alias command will be added later in the futre to streamline everything. 
+
+#Doucumentation of Acorn Language (v1.0)
+Acorn is an interpreted language which does not depend upon a compiler. Its only dependence is having Python3 installed on the machine of intended coding. Acorn is very similar to Javascript. A more comprehensive tutorial will be written in the future. 
+
+<b>Syntax</b>
+<p>All Acorn files must have the extention of <code>.acorn</code>. All statements in Acorn must be finished with a semi-colon (including if statements and functions)</p>
+
+<b>Printing</b>
+<p>Printing to the console is simple. <code>print("Hello, World from Acorn!");</code><br>As of Acorn 1.0, Acorn disallows multiple types in call-by-name operations e.g.<code>print("Give me a high "+5);</code> is disallowed. Homogenous typed values forming an expression are allowed such as <code>print(2.14159+1);</code></p> 
