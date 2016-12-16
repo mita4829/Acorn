@@ -1,6 +1,6 @@
 all:
 		clear
-		python3 Foundation.py
+		python3 Scanner.py Hello.acorn
 Foundation:
 		python3 Foundation.py
 Lexer:
@@ -9,3 +9,5 @@ Parser:
 		python3 Parser.py
 Scanner:
 		python3 Scanner.py
+Acorn:
+		python3 Scanner.py Hello.acorn

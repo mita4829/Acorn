@@ -1,8 +1,7 @@
 language: python
 python:
   - "3.5"
-  - "3.4"
-  - "3.3"
-  - "3.2"
-install: "pip install -r requirements.txt"
-script: python3 Scanner.py Hello.acorn
+install:
+  - pip install -r requirements.txt
+script:
+  - make Acorn
