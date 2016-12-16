@@ -4,4 +4,4 @@ python:
 install:
   - pip install -r requirements.txt --use-mirrors
 script:
-  - {envpython} setup.py develop && make Acorn
+  - python3 setup.py; make Acorn
