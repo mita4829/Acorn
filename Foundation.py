@@ -14,8 +14,10 @@ class B():
             return True
         elif(self.boolean == "false"):
             return False
-        elif(self.boolean != 0):
-            return True
+        elif(isinstance(self.boolean,B)):
+            return (self.boolean).B()
+        elif(isinstance(self.boolean,N)):
+            return bool(self.boolean.N())
         else:
             return False
 
@@ -76,9 +78,28 @@ class If():
     def expr3(self):
         return self.e3
 
+class Seq():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+
 #Side effects
 class Print():
     def __init__(self,expr):
         self.expr1 = expr
     def E(self):
         return self.expr1
+
+
+#Helper functions
+def isfloat(n):
+    try:
+        float(n)
+        return True
+    except:
+        return False

@@ -23,10 +23,11 @@ class Tokenizer():
             self.next()
             result = self.print_grammar()
             self.next()
+            self.next()
         elif(self.current == "if"):
             self.next()
             result = self.if_grammar()
-        elif(isfloat(self.current)):
+        elif(isfloat(self.current) or (self.current == '-')):
             return self.number_grammar()
         elif(self.current == "true" or self.current == "false"):
             return Foundation.B(self.current)
@@ -51,14 +52,17 @@ class Tokenizer():
         e1 = self.grammar()
         self.next() #)
         self.next() #{
-        self.next() #expr2
         e2 = self.grammar()
+        #check for more of if statement body
+        while(self.current != '}'):
+            e2 = Foundation.Seq(e2,self.grammar())
         self.next() #}
-        self.next() #;
         if(self.current == "else"):
             self.next() #{
             self.next() #next expr
             e3 = self.grammar()
+            while(self.current != '}'):
+                e3 = Foundation.Seq(e3,self.grammar())
             self.next() #}
             self.next() #;
             self.next()
@@ -71,6 +75,9 @@ class Tokenizer():
             if(self.current == '+'):
                 self.next()
                 result = Foundation.Binary("Plus",result,self.term_grammar())
+            elif(self.current == '-' and isinstance(result,Foundation.Null)):
+                self.next()
+                result = Foundation.Unary("Neg",self.term_grammar())
             elif(self.current == '-'):
                 self.next()
                 result = Foundation.Binary("Minus",result,self.term_grammar())

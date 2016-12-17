@@ -1,6 +1,8 @@
-print("Hello world!");
-if(true){
-  print("This is true");
+print("Hello, World!");
+
+if(1+2+4*0){
+  print("You should see me");
+  print("The answer is 3");
 }else{
-  print("This is false");
+  print("You cannot see me");
 };

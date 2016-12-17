@@ -64,6 +64,10 @@ def step(expr,stack,heap):
             return step(expr.expr2(),stack,heap)
         else:
             return step(expr.expr3(),stack,heap)
+    #Seq
+    elif(case(expr,Foundation.Seq)):
+        step(expr.expr1(),stack,heap)
+        step(expr.expr2(),stack,heap)
 
     #Inductive cases
 
@@ -83,4 +87,4 @@ def step(expr,stack,heap):
 
     #Induct If
     elif(case(expr,Foundation.If)):
-        return Foundation.If(step(expr.expr1(),stack,heap),expr.expr2(),expr.expr3())
+        return step(Foundation.If(step(expr.expr1(),stack,heap),expr.expr2(),expr.expr3()),stack,heap)
