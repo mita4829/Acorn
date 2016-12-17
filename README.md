@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/mita4829/Acorn.svg?branch=master)](https://travis-ci.org/mita4829/Acorn)
 # Acorn
 A simple interpreted programming language builded upon Python. 
 
