@@ -111,8 +111,8 @@ class LexerClass():
                 r += 1
                 self.rp += 1
 
-        self.stackFrame.append(tokens)
-        return tokens
+
+
 
 #acorn = LexerClass()
 #print(acorn.lexer("print(\"Hello world\")"))

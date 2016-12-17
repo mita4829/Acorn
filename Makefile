@@ -1,6 +1,6 @@
 all:
 		clear
-		python3 Scanner.py Hello.acorn
+		python3 Driver.py Hello.acorn
 Foundation:
 		python3 Foundation.py
 Lexer:
@@ -8,6 +8,8 @@ Lexer:
 Parser:
 		python3 Parser.py
 Scanner:
-		python3 Scanner.py
+		python3 Driver.py
 Acorn:
-		python3 Scanner.py Hello.acorn
+		python3 Driver.py Hello.acorn
+Tokenizer:
+		python3 Tokenizer.py

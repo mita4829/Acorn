@@ -1,12 +1,6 @@
 import Foundation
-
-parsedTokens = []
-def tokenizer(array):
-    for i in range(0,len(array)):
-        parsedTokens.append(grammar(array[i]))
-
-    return parsedTokens
-
+from sys import exit
+#Helper function
 def isfloat(n):
     try:
         float(n)
@@ -14,37 +8,59 @@ def isfloat(n):
     except:
         return False
 
-def grammar(array):
-    for i in range(0,len(array)):
-        token = array[i]
-        if(token == "print"):
-            return print_grammar(array[1:])
-        elif(token == '('):
-            return grammar(array[1:])
-        elif(isfloat(token)):
-            return number_grammer(array)
-        elif(type(token)==str):
-            #Return S object with removed quotes
-            return Foundation.S(token[1:-1])
+class Tokenizer():
+    def __init__(self,array):
+        self.tokens = array
+        self.current = self.tokens[0] if len(self.tokens) > 0 else None
+        self.parsedTokens = []
+    def next(self):
+        self.tokens = self.tokens[1:]
+        self.current = self.tokens[0] if len(self.tokens) > 0 else None
 
-def print_grammar(array):
-    return Foundation.Print(grammar(array[1:]))
-def number_grammer(array):
-    result = term_grammar(array)
-    if(array[1] == '+'):
-        result = Foundation.Binary("Plus",result,term_grammar(array[2:]))
-    elif(array[1] == '-'):
-        result = Foundation.Binary("Minus",result,term_grammar(array[2:]))
-    return result
-def term_grammar(array):
-    result = factor_grammar(array)
-    if(array[1] == '*'):
-        result = Foundation.Binary("Times",result,term_grammar(array[2:]))
-    elif(array[1] == '/'):
-        result = Foundation.Binary("Div",result,term_grammar(array[2:]))
-    return result
-def factor_grammar(array):
-    return Foundation.N(array[0])
+    def grammar(self):
+        if(self.current == "print"):
+            self.next()
+            self.parsedTokens.append(self.print_grammar())
+        elif(isfloat(self.current)):
+            return self.number_grammar()
+        elif(type(self.current) == str):
+            return Foundation.S(self.current[1:-1])
 
-#tokenizer([['5','+','5',';']])
-#print(parsedTokens)
+        return self.parsedTokens
+
+    def print_grammar(self):
+        self.next()
+        return Foundation.Print(self.grammar())
+    def number_grammar(self):
+        result = self.term_grammar()
+        while(self.current in ['+','-']):
+            if(self.current == '+'):
+                self.next()
+                result = Foundation.Binary("Plus",result,self.term_grammar())
+            elif(self.current == '-'):
+                self.next()
+                result = Foundation.Binary("Minus",result,self.term_grammar())
+        return result
+        
+    def term_grammar(self):
+        result = self.factor_grammar()
+        while(self.current in ['*','/']):
+            if(self.current == '*'):
+                self.next()
+                result = Foundation.Binary("Times",result,self.factor_grammar())
+            elif(self.current == '/'):
+                self.next()
+                result = Foundation.Binary("Div",result,self.factor_grammar())
+        return result
+
+    def factor_grammar(self):
+        result = Foundation.Null()
+        if(isfloat(self.current)):
+            result = Foundation.N(self.current)
+            self.next()
+        elif(self.current == '('):
+            self.next()
+            result = self.number_grammar()
+            self.next()
+
+        return result
