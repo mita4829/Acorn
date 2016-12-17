@@ -12,3 +12,6 @@ Acorn is an interpreted language which does not depend upon a compiler. Its only
 
 <b>Printing</b>
 <p>Printing to the console is simple. <code>print("Hello, World from Acorn!");</code><br>As of Acorn 1.0, Acorn disallows multiple types in call-by-name operations e.g.<code>print("Give me a high "+5);</code> is disallowed. Homogenous typed values forming an expression are allowed such as <code>print(2.14159+1.0);</code></p> 
+
+<b>Conditionals</b>
+<p>If statements have similar syntax. <code>if(true){ print("This is true!");<br/>}else{<br/>print("This is false");<br/>};</code><br/>Acorn does not support else if condition. The boolean expression being evaluated must be a boolean value.</p> 
