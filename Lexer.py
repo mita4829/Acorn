@@ -111,9 +111,11 @@ class LexerClass():
                 r += 1
                 self.rp += 1
 
+        #if(tokens != []):
+        #    self.stackFrame.append(tokens)
 
 
 
 #acorn = LexerClass()
-#print(acorn.lexer("print(\"Hello world\")"))
+#print(acorn.lexer("if(true){ print(\"this works\"); };"))
 #print(acorn.stackFrame)

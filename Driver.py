@@ -34,11 +34,11 @@ def Driver():
     acornStackFrame = acorn.stackFrame
     for i in range(0,len(acornStackFrame)):
         subStack = acornStackFrame[i]
-
+        #print(subStack)
         ast = Tokenizer.Tokenizer(subStack)
         astp = ast.grammar()
 
-        Parser.step(astp[0],{},{})
+        Parser.step(astp,{},{})
 
 
     dataFile.close()

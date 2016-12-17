@@ -10,8 +10,6 @@ values ::= n | b | null | str | function(x){expr}
 from sys import exit
 import Foundation
 
-stack = {}
-heap = {}
 
 def case(expr,typep):
     return isinstance(expr,typep)
@@ -62,10 +60,10 @@ def step(expr,stack,heap):
 
     #If
     elif(case(expr,Foundation.If) and isValue(expr.expr1())):
-        if(bool(step(expr.expr1(),stack,heap))):
-            return expr.expr2()
+        if( step(expr.expr1(),stack,heap) ):
+            return step(expr.expr2(),stack,heap)
         else:
-            return expr.expr3()
+            return step(expr.expr3(),stack,heap)
 
     #Inductive cases
 
@@ -83,5 +81,6 @@ def step(expr,stack,heap):
         else:
             return Foundation.Binary(expr.bop(),step(expr.expr1(),stack,heap),expr.expr2())
 
+    #Induct If
     elif(case(expr,Foundation.If)):
         return Foundation.If(step(expr.expr1(),stack,heap),expr.expr2(),expr.expr3())

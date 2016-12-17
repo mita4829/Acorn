@@ -8,9 +8,16 @@ class N():
 #Boolean meta class
 class B():
     def __init__(self,b):
-        self.b = bool(b)
+        self.boolean = b
     def B(self):
-        return self.b
+        if(self.boolean == "true"):
+            return True
+        elif(self.boolean == "false"):
+            return False
+        elif(self.boolean != 0):
+            return True
+        else:
+            return False
 
 #String meta class
 class S():

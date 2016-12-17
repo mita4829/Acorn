@@ -1,1 +1,6 @@
-print("Hello, World from Acorn");
+print("Hello world!");
+if(true){
+  print("This is true");
+}else{
+  print("This is false");
+};

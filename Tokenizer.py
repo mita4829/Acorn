@@ -18,19 +18,53 @@ class Tokenizer():
         self.current = self.tokens[0] if len(self.tokens) > 0 else None
 
     def grammar(self):
+        result = Foundation.Null()
         if(self.current == "print"):
             self.next()
-            self.parsedTokens.append(self.print_grammar())
+            result = self.print_grammar()
+            self.next()
+        elif(self.current == "if"):
+            self.next()
+            result = self.if_grammar()
         elif(isfloat(self.current)):
             return self.number_grammar()
+        elif(self.current == "true" or self.current == "false"):
+            return Foundation.B(self.current)
+        elif(self.current == '}'):
+            return
         elif(type(self.current) == str):
-            return Foundation.S(self.current[1:-1])
+            val = Foundation.S(self.current[1:-1])
+            self.next() #)
+            return val
+        else:
+            if(len(self.tokens) > 0):
+                self.next()
+                self.grammar()
 
-        return self.parsedTokens
+        return result
 
     def print_grammar(self):
         self.next()
         return Foundation.Print(self.grammar())
+    def if_grammar(self):
+        self.next() #bool
+        e1 = self.grammar()
+        self.next() #)
+        self.next() #{
+        self.next() #expr2
+        e2 = self.grammar()
+        self.next() #}
+        self.next() #;
+        if(self.current == "else"):
+            self.next() #{
+            self.next() #next expr
+            e3 = self.grammar()
+            self.next() #}
+            self.next() #;
+            self.next()
+            return Foundation.If(e1,e2,e3)
+        return Foundation.If(e1,e2,Foundation.Null())
+
     def number_grammar(self):
         result = self.term_grammar()
         while(self.current in ['+','-']):
@@ -41,7 +75,7 @@ class Tokenizer():
                 self.next()
                 result = Foundation.Binary("Minus",result,self.term_grammar())
         return result
-        
+
     def term_grammar(self):
         result = self.factor_grammar()
         while(self.current in ['*','/']):
