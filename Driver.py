@@ -3,6 +3,7 @@ import Lexer
 import Tokenizer
 import Parser
 import Foundation
+import Memory
 
 WHITE = "\x1B[0m"
 RED = "\x1B[31m"
@@ -12,8 +13,6 @@ GREEN = "\x1B[32m"
 CYAN = "\x1B[36m"
 
 def Driver():
-    stack = {}
-    heap = {}
     #Get Acorn script from input
     try:
         argument = sys.argv[1]
@@ -32,14 +31,16 @@ def Driver():
 
     #Send tokens to tokenizer and get an Abstract syntax tree back: ast is a 2nd array
     acornStackFrame = acorn.stackFrame
+    Mem = Memory.Memory()
     for i in range(0,len(acornStackFrame)):
         subStack = acornStackFrame[i]
         #print(subStack)
-        ast = Tokenizer.Tokenizer(subStack)
+        ast = Tokenizer.Tokenizer(subStack,Mem)
+        #print(Mem.heap)
         astp = ast.grammar()
-
-        Parser.step(astp,{},{})
-
-
+        #print(astp)
+        Parser.step(astp,Mem,Mem)
+        #print(str(Mem.heap)+"heap")
+        #print(str(Mem.stack)+"stack")
     dataFile.close()
 Driver()

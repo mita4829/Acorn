@@ -1,8 +1,5 @@
-print("Hello, World!");
-
-if(1+2+4*0){
-  print("You should see me");
-  print("The answer is 3");
-}else{
-  print("You cannot see me");
+var notPi = 2.14159;
+var makePi = function(){
+  return notPi+1;
 };
+print(makePi());

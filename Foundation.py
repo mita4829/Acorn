@@ -18,6 +18,8 @@ class B():
             return (self.boolean).B()
         elif(isinstance(self.boolean,N)):
             return bool(self.boolean.N())
+        elif(self.boolean == True):
+            return True
         else:
             return False
 
@@ -78,6 +80,27 @@ class If():
     def expr3(self):
         return self.e3
 
+class Function():
+    def __init__(self,arguments,rtn,body):
+        self.e1 = arguments
+        self.e2 = rtn
+        self.e3 = body
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+    def expr3(self):
+        return self.e3
+
+class Call():
+    def __init__(self,function,arguments):
+        self.e1 = function
+        self.e2 = arguments
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
 class Seq():
     def __init__(self,e1,e2):
         self.e1 = e1
@@ -86,6 +109,72 @@ class Seq():
         return self.e1
     def expr2(self):
         return self.e2
+
+class Eq():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class Ne():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class Lt():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class Le():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class Gt():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class Ge():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class Malloc():
+    def __init__(self,m,x,v):
+        self.e1 = m
+        self.e2 = x
+        self.e3 = v
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+    def expr3(self):
+        return self.e3
 
 
 #Side effects
