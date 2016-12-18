@@ -9,14 +9,16 @@ values ::= n | b | null | str | function(x){expr}
 
 from sys import exit
 import Foundation
+import Memory
 
 
 def case(expr,typep):
     return isinstance(expr,typep)
 def isValue(expr):
-    return isinstance(expr,Foundation.N) or isinstance(expr,Foundation.B) or isinstance(expr,Foundation.S) or isinstance(expr,Foundation.Null)
+    return isinstance(expr,Foundation.N) or isinstance(expr,Foundation.B) or isinstance(expr,Foundation.S) or isinstance(expr,Foundation.Null) or isinstance(expr,Foundation.Var) or isinstance(expr,Foundation.Function)
 
 def step(expr,stack,heap):
+    #print(heap.heap)
     #Base cases
     #N
     if(case(expr,Foundation.N)):
@@ -27,6 +29,20 @@ def step(expr,stack,heap):
     #S
     elif(case(expr,Foundation.S)):
         return expr.S()
+    #Function
+    elif(case(expr,Foundation.Function)):
+        return expr
+    #Var
+    elif(case(expr,Foundation.Var)):
+        x = expr.X()
+        callStack = stack.stackCall(x)
+        callHeap = heap.heapCall(x)
+        if((callStack == "DNE") and (callHeap == "DNE")):
+            exit("Acorn: Use of variable "+str(x)+" before declaration.")
+        if(callStack != "DNE"):
+            return callStack
+        else:
+            return callHeap
     #Null
     elif(case(expr,Foundation.Null)):
         return expr.null()
@@ -68,6 +84,39 @@ def step(expr,stack,heap):
     elif(case(expr,Foundation.Seq)):
         step(expr.expr1(),stack,heap)
         step(expr.expr2(),stack,heap)
+    #Eq
+    elif(case(expr,Foundation.Eq)):
+        return Foundation.B(step(expr.expr1(),stack,heap) == step(expr.expr2(),stack,heap))
+    #Ne
+    elif(case(expr,Foundation.Ne)):
+        return Foundation.B(step(expr.expr1(),stack,heap) != step(expr.expr2(),stack,heap))
+    #Lt
+    elif(case(expr,Foundation.Lt)):
+        return Foundation.B(step(expr.expr1(),stack,heap) < step(expr.expr2(),stack,heap))
+    #Le
+    elif(case(expr,Foundation.Le)):
+        return Foundation.B(step(expr.expr1(),stack,heap) <= step(expr.expr2(),stack,heap))
+    #Ge
+    elif(case(expr,Foundation.Ge)):
+        return Foundation.B(step(expr.expr1(),stack,heap) >= step(expr.expr2(),stack,heap))
+    #Gt
+    elif(case(expr,Foundation.Gt)):
+        return Foundation.B(step(expr.expr1(),stack,heap) > step(expr.expr2(),stack,heap))
+
+    #Var Const
+    elif(case(expr,Foundation.Malloc)):
+        val = step(expr.expr3(),stack,heap)
+        while((not isValue(val)) and (type(val) != str) and (type(val) != float) and(type(val) != bool)):
+            val = step(val,stack,heap)
+        if(expr.expr1() == "Var"):
+            heap.heap[expr.expr2().X()] = step(val,stack,heap)
+        elif(expr.expr1() == "Const"):
+            stack.stack[expr.expr2().X()] = step(val,stack,heap)
+        return
+
+    #Call
+    elif(case(expr,Foundation.Call)):
+        return step(expr.expr1(),stack,heap)
 
     #Inductive cases
 
@@ -88,3 +137,6 @@ def step(expr,stack,heap):
     #Induct If
     elif(case(expr,Foundation.If)):
         return step(Foundation.If(step(expr.expr1(),stack,heap),expr.expr2(),expr.expr3()),stack,heap)
+
+    else:
+        return expr #
