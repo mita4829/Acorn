@@ -1,11 +1,4 @@
-"""
-Grammar for Acorn
-
-expr ::= x | n | b | null | uop expr1 | expr1 bop expr2 | expr1 ? expr2 : expr3 |
-function(x){expr} | f(expr1) | print(expr1)
-values ::= n | b | null | str | function(x){expr}
-
-"""
+#Acorn v1.0
 
 from sys import exit
 import Foundation
@@ -16,6 +9,72 @@ def case(expr,typep):
     return isinstance(expr,typep)
 def isValue(expr):
     return isinstance(expr,Foundation.N) or isinstance(expr,Foundation.B) or isinstance(expr,Foundation.S) or isinstance(expr,Foundation.Null) or isinstance(expr,Foundation.Var) or isinstance(expr,Foundation.Function)
+
+def subsitute(expr,value,x):
+    #N
+    if(case(expr,Foundation.N)):
+        return expr
+    #B
+    elif(case(expr,Foundation.B)):
+        return expr
+    #S
+    elif(case(expr,Foundation.S)):
+        return expr
+    #Null
+    elif(case(expr,Foundation.Null)):
+        return expr
+    #Var
+    elif(case(expr,Foundation.Var)):
+        if(x == expr.X()):
+            return value
+        else:
+            return expr
+    #Binary
+    elif(case(expr,Foundation.Binary)):
+        return Foundation.Binary(expr.bop(),subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
+
+    #Eq
+    elif(case(expr,Foundation.Eq)):
+        return Foundation.Eq(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
+    #Ne
+    elif(case(expr,Foundation.Ne)):
+        return Foundation.Ne(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
+    #Lt
+    elif(case(expr,Foundation.Lt)):
+        return Foundation.Lt(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
+    #Le
+    elif(case(expr,Foundation.Le)):
+        return Foundation.Le(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
+    #Ge
+    elif(case(expr,Foundation.Ge)):
+        return Foundation.Ge(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
+    #Gt
+    elif(case(expr,Foundation.Gt)):
+        return Foundation.Gt(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
+
+    #If
+    elif(case(expr,Foundation.If)):
+        return Foundation.If(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x),subsitute(expr.expr3(),value,x))
+    #Seq
+    elif(case(expr,Foundation.Seq)):
+        e1 = subsitute(expr.expr1(),value,x)
+        e2 = subsitute(expr.expr2(),value,x)
+        return Foundation.Seq(e1,e2)
+
+    elif(case(expr,Foundation.Call)):
+        return Foundation.Call(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
+    #Return
+    elif(case(expr,Foundation.Return)):
+        return Foundation.Return(subsitute(expr.expr1(),value,x))
+    #print
+    elif(case(expr,Foundation.Print)):
+        return Foundation.Print(subsitute(expr.E(),value,x))
+    #Malloc
+    elif(case(expr,Foundation.Malloc)):
+        return Foundation.Malloc(expr.expr1(),expr.expr2(),subsitute(expr.expr3(),value,x))
+    else:
+        print(expr)
+        print("Uncaught subsitute")
 
 def step(expr,stack,heap):
     #print(heap.heap)
@@ -52,7 +111,7 @@ def step(expr,stack,heap):
             print(step(expr.E(),stack,heap))
         else:
             val = step(expr.E(),stack,heap)
-            while(not isValue(val)):
+            while(not isValue(val) and (type(val) != str) and (type(val) != float) and(type(val) != bool)):
                 val = step(val,stack,heap)
             print(str(step(val,stack,heap)))
         return
@@ -82,8 +141,19 @@ def step(expr,stack,heap):
             return step(expr.expr3(),stack,heap)
     #Seq
     elif(case(expr,Foundation.Seq)):
-        step(expr.expr1(),stack,heap)
-        step(expr.expr2(),stack,heap)
+        e1 = step(expr.expr1(),stack,heap)
+        if(case(e1,Foundation.Return)):
+            return e1
+        e2 = step(expr.expr2(),stack,heap)
+        if(case(e2,Foundation.Return)):
+            return e2
+        return
+
+    #Return
+    elif(case(expr,Foundation.Return)):
+        return expr
+
+    #Recursive functions
     #Eq
     elif(case(expr,Foundation.Eq)):
         return Foundation.B(step(expr.expr1(),stack,heap) == step(expr.expr2(),stack,heap))
@@ -103,10 +173,10 @@ def step(expr,stack,heap):
     elif(case(expr,Foundation.Gt)):
         return Foundation.B(step(expr.expr1(),stack,heap) > step(expr.expr2(),stack,heap))
 
-    #Var Const
+    #Var Const Malloc
     elif(case(expr,Foundation.Malloc)):
         val = step(expr.expr3(),stack,heap)
-        while((not isValue(val)) and (type(val) != str) and (type(val) != float) and(type(val) != bool)):
+        while((not isValue(val)) and (type(val) != str) and (type(val) != float) and (type(val) != bool)):
             val = step(val,stack,heap)
         if(expr.expr1() == "Var"):
             heap.heap[expr.expr2().X()] = step(val,stack,heap)
@@ -116,7 +186,22 @@ def step(expr,stack,heap):
 
     #Call
     elif(case(expr,Foundation.Call)):
-        return step(expr.expr1(),stack,heap)
+        functionName = expr.expr2().X()
+        functionObject = heap.heapCall(functionName)
+        functionArgName = functionObject.expr1().X()
+        argument = expr.expr1()
+        while(not isValue(argument)):
+            argument = step(argument,stack,heap)
+        functionBody = functionObject.expr2()
+        sbtBody = subsitute(functionBody,argument,functionArgName)
+        rtn = step(sbtBody,stack,heap)
+        if(case(rtn,Foundation.Return)):
+            if(not case(rtn.expr1(),Foundation.Null)):
+                return step(rtn.expr1(),stack,heap)
+
+
+        return Foundation.Null()
+
 
     #Inductive cases
 
@@ -130,6 +215,7 @@ def step(expr,stack,heap):
     #Induct Binary
     elif(case(expr,Foundation.Binary)):
         if(isValue(expr.expr1())):
+
             return Foundation.Binary(expr.bop(),expr.expr1(),step(expr.expr2(),stack,heap))
         else:
             return Foundation.Binary(expr.bop(),step(expr.expr1(),stack,heap),expr.expr2())

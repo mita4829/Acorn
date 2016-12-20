@@ -81,25 +81,28 @@ class If():
         return self.e3
 
 class Function():
-    def __init__(self,arguments,rtn,body):
+    def __init__(self,arguments,body):
         self.e1 = arguments
-        self.e2 = rtn
-        self.e3 = body
+        self.e2 = body
     def expr1(self):
         return self.e1
     def expr2(self):
         return self.e2
-    def expr3(self):
-        return self.e3
 
 class Call():
-    def __init__(self,function,arguments):
-        self.e1 = function
-        self.e2 = arguments
+    def __init__(self,arguments,body):
+        self.e1 = arguments
+        self.e2 = body
     def expr1(self):
         return self.e1
     def expr2(self):
         return self.e2
+
+class Return():
+    def __init__(self,returns):
+        self.e1 = returns
+    def expr1(self):
+        return self.e1
 
 class Seq():
     def __init__(self,e1,e2):

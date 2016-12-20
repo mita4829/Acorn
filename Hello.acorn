@@ -1,5 +1,8 @@
-var notPi = 2.14159;
-var makePi = function(){
-  return notPi+1;
+var factorial = function(x){
+  if(x <= 0){
+    return 1;
+  };
+  var fact = factorial(x-1);
+  return x*fact;
 };
-print(makePi());
+print(factorial(5));

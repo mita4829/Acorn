@@ -42,7 +42,9 @@ class Tokenizer():
             result = self.function_grammar()
         elif(self.current == "return"):
             self.next()
-            return self.grammar()
+            if(self.current == ';'):
+                return Foundation.Return(Foundation.Null())
+            return Foundation.Return(self.grammar())
         elif(self.current == '}'):
             return
         elif(type(self.current) == str):
@@ -93,14 +95,19 @@ class Tokenizer():
 
     def function_grammar(self):
         self.next()
-        #No arguments for now
+        arg = Foundation.Null()
+        if(self.current != ')'):
+            arg = Foundation.Var(self.current)
+            self.MemoryState.variableNames.append(self.current)
+            self.next()
         self.next()
         self.next() #{
         body = self.grammar()
+        while(self.current != '}'):
+            body = Foundation.Seq(body,self.grammar())
         self.next() #;
-        self.next() #}
-        self.next() #;
-        return Foundation.Function(Foundation.Null(),body,body)
+        self.next() #None
+        return Foundation.Function(arg,body)
 
 
     def logical_grammar(self):
@@ -145,22 +152,16 @@ class Tokenizer():
         while(self.current in ['*','/','(']):
             if(self.current == '*'):
                 self.next()
-                result = Foundation.Binary("Times",result,self.factor_grammar())
+                result = Foundation.Binary("Times",result,self.logical_grammar())
             elif(self.current == '/'):
                 self.next()
-                result = Foundation.Binary("Div",result,self.factor_grammar())
+                result = Foundation.Binary("Div",result,self.logical_grammar())
             elif(self.current == '('):
-                x = result.X()
-                fs = self.MemoryState.stackCall(x)
-                fh = self.MemoryState.heapCall(x)
-                if(isinstance(fs,Foundation.Function)):
-                    return Foundation.Call(fs.expr2(),Foundation.Null())
-                elif(isinstance(fh,Foundation.Function)):
-                    return Foundation.Call(fh.expr2(),Foundation.Null())
-                else:
-                    print(fs)
-                    print(fh)
-                    exit("Acorn: Unexpected call operation to non-function value.")
+                arg = Foundation.Null()
+                self.next()
+                if(self.current != ')'):
+                    arg = self.grammar()
+                result = Foundation.Call(arg,result)
         return result
 
     def factor_grammar(self):
@@ -168,12 +169,7 @@ class Tokenizer():
         if(isfloat(self.current)):
             result = Foundation.N(self.current)
             self.next()
-        elif(self.current == '('):
-            self.next()
-            result = self.logical_grammar()
-            self.next()
         elif(self.current in self.MemoryState.variableNames):
             result = Foundation.Var(self.current)
             self.next()
-
         return result
