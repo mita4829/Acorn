@@ -20,8 +20,16 @@ Acorn is an interpreted language which does not depend upon a compiler. Its only
 <p>As of Acorn 1.0, the language is a dynamic-scope langauge. It is recommended to not use the same variable name anywhere in the Acorn code regardless of scope due to dynamic-scoping, otherwise, declaration of the same variable name will result in overwriting the previous value stored in memory bound to that varible name. Declaring variable example <code>var x = 0;</code>varibales can be bounded to values or homogenous-typed expressions. Declaring constant example <code> const e = 2.718; </code></p>
 
 <b>Functions <i>(beta)</i></b>
-<p>Functions are limited in v1.0. Function declarion cannot be anonymous and must be bound to a variable name. All functions are required to return at the end of the function body. Functions currently do not take arguments. Function example: <code>
-var f = function(){
-  return 1+2;
+<p>Functions are limited in v1.0. Function declarion cannot be anonymous and must be bound to a variable name. All functions are required to return at the end of the function body. Functions currently take only one arguments. Function example: <code>
+var f = function(x){
+  return 1+x;
 };
-</code> Calling function f: <code>f();</code> </p>
+</code> Calling function f: <code>f(1);</code> </p>
+<p><b>Scoping:</b> Due to the nature of Acorn being a big-step interpreter, variables and constants defined in the scope of the function will also exist outside of the scope.  <b>Recursion:</b>Acorn v1.0 handles some recursion with the restriction that all return statement in a recursive function cannot contain the function name. Example of a recrusive function: <code> var factorial = function(x){
+  if(x == 0){
+    return 1;
+  };
+  var fact = factorial(x-1);
+  return x*fact;
+};
+</code> </p>
