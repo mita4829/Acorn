@@ -202,7 +202,10 @@ def step(expr,stack,heap):
 
         return Foundation.Null()
 
-
+    #gets
+    elif(case(expr,Foundation.Input)):
+        castToken = input()
+        return expr.cast(castToken)
     #Inductive cases
 
     #Induct Unary

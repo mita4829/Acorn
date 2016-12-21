@@ -187,6 +187,18 @@ class Print():
     def E(self):
         return self.expr1
 
+class Input():
+    def __init__(self):
+        self.expr1 = None
+    def cast(self,n):
+        if(isfloat(n)):
+            return N(n)
+        if(n=="true" or n=="false"):
+            return B(n)
+        if(n=="null"):
+            return Null()
+        return S(n)
+
 
 #Helper functions
 def isfloat(n):

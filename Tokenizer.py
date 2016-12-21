@@ -45,6 +45,10 @@ class Tokenizer():
             if(self.current == ';'):
                 return Foundation.Return(Foundation.Null())
             return Foundation.Return(self.grammar())
+        elif(self.current == "gets"):
+            self.next()
+            self.next()
+            return Foundation.Input()
         elif(self.current == '}'):
             return
         elif(type(self.current) == str):
