@@ -33,3 +33,6 @@ var f = function(x){
   return x*fact;
 };
 </code> </p>
+
+<b>Input</b>
+<p>Acorn accepts input from the gets() function. <code>var n = gets();</code> gets() automatically infers the type of input. </p>
