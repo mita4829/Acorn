@@ -15,13 +15,13 @@ Acorn is an interpreted language which does not depend upon a compiler. Its only
 <p>Printing to the console is simple. <code>print("Hello, World from Acorn!");</code><br>As of Acorn 1.0, Acorn disallows multiple types in call-by-name operations e.g.<code>print("Give me a high "+5);</code> is disallowed. Homogenous-typed values forming an expression are allowed such as <code>print(2.14159+1.0);</code></p> 
 
 <b>Conditionals</b>
-<p>If statements have similar syntax as Javascript. <br/><code>if(true){ print("This is true!"); }else{ print("This is false"); };</code><br/>Acorn does not support else if conditions. The boolean expression being evaluated will be casted to be of typed boolean. Expressions to be casted to booleans are <i>Logical Operations and Numbers</i>. Strings are not allowed to be casted directly to boolean e.g. <code>if("string"){ ... }; will not evaluate correctly.</code></p>
+<p>If statements have similar syntax as Javascript. <br/><code>if(true){ print("This is true!"); }else{ print("This is false"); };</code><br/>Acorn does not support else if conditions. The boolean expression being evaluated will be casted to be of type boolean. Expressions to be casted to booleans are <i>Logical Operations and Numbers</i>. Strings are not allowed to be casted directly to boolean e.g. <code>if("string"){ ... }; will not evaluate correctly.</code></p>
 
 <b>Variables and Constants</b>
-<p>As of Acorn 1.0, the language is a dynamic-scope langauge. It is recommended to not use the same variable name anywhere in the Acorn code regardless of scope due to dynamic-scoping, otherwise, declaration of the same variable name will result in overwriting the previous value stored in memory bound to that varible name. Declaring variable example <code>var x = 0;</code>varibales can be bounded to values or homogenous-typed expressions. Declaring constant example <code> const e = 2.718; </code></p>
+<p>As of Acorn 1.0, the language is a dynamic-scope langauge. It is recommended to not use the same variable name anywhere in the Acorn code regardless of scope due to dynamic-scoping, otherwise, declaration of the same variable name will result in overwriting the previous value stored in memory bound to that variable name. Declaring variable example <code>var x = 0;</code>variables can be bounded to values or homogenous-typed expressions. Declaring constant example <code> const e = 2.718; </code></p>
 
 <b>Functions <i>(beta)</i></b>
-<p>Functions are limited in v1.0. Function declarion cannot be anonymous and must be bound to a variable name. All functions are required to return at the end of the function body. Functions currently take only one arguments. Function example: <code>
+<p>Functions are limited in v1.0. Function declaration cannot be anonymous and must be bound to a variable name. All functions are required to return at the end of the function body. Functions currently take only one arguments. Function example: <code>
 var f = function(x){
   return 1+x;
 };
