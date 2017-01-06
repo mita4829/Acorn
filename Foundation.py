@@ -179,7 +179,47 @@ class Malloc():
     def expr3(self):
         return self.e3
 
+class Array():
+    def __init__(self,e1):
+        self.e1 = e1
+    def expr1(self):
+        return self.e1
 
+class Index():
+    def __init__(self,array,index):
+        self.e1 = array
+        self.e2 = index
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class Assign():
+    def __init__(self,var,val):
+        self.e1 = var
+        self.e2 = val
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class ForEach():
+    def __init__(self,i,start,end,scope,closure):
+        self.e1 = i
+        self.e2 = start
+        self.e3 = end
+        self.e4 = scope
+        self.e5 = closure
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+    def expr3(self):
+        return self.e3
+    def expr4(self):
+        return self.e4
+    def expr5(self):
+        return self.e5
 #Side effects
 class Print():
     def __init__(self,expr):

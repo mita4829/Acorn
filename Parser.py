@@ -8,7 +8,18 @@ import Memory
 def case(expr,typep):
     return isinstance(expr,typep)
 def isValue(expr):
-    return isinstance(expr,Foundation.N) or isinstance(expr,Foundation.B) or isinstance(expr,Foundation.S) or isinstance(expr,Foundation.Null) or isinstance(expr,Foundation.Var) or isinstance(expr,Foundation.Function)
+    return isinstance(expr,Foundation.N) or isinstance(expr,Foundation.B) or isinstance(expr,Foundation.S) or isinstance(expr,Foundation.Null) or isinstance(expr,Foundation.Var) or isinstance(expr,Foundation.Function) or isinstance(expr,Foundation.Array)
+def isfloat(n):
+    try:
+        float(n)
+        return True
+    except:
+        return False
+def isRaw(val):
+    if((type(val) == str) or (type(val) == float) or (type(val) == bool) or (type(val) == int)):
+        return True
+    else:
+        return False
 
 def subsitute(expr,value,x):
     #N
@@ -72,6 +83,9 @@ def subsitute(expr,value,x):
     #Malloc
     elif(case(expr,Foundation.Malloc)):
         return Foundation.Malloc(expr.expr1(),expr.expr2(),subsitute(expr.expr3(),value,x))
+    #Index
+    elif(case(expr, Foundation.Index)):
+        return Foundation.Index(expr.expr1(),subsitute(expr.expr2(),value,x))
     else:
         print(expr)
         print("Uncaught subsitute")
@@ -108,12 +122,37 @@ def step(expr,stack,heap):
     #Print
     elif(case(expr,Foundation.Print)):
         if(isValue(expr.E())):
-            print(step(expr.E(),stack,heap))
+            #print("isValue")
+            val = expr.E()
+            if(case(val,Foundation.Var)):
+                val = step(val,stack,heap)
+            valFinal = step(val,stack,heap)
+            if(isfloat(valFinal)):
+                if((valFinal % 1) == 0):
+                    print(str(int(valFinal)))
+                    return
+            print(str(valFinal))
+        elif(isRaw(expr.E())):
+            #print("isRaw")
+            valFinal = expr.E()
+            if(isfloat(valFinal)):
+                if((valFinal % 1) == 0):
+                    print(str(int(valFinal)))
+                    return
+            print(str(valFinal))
         else:
-            val = step(expr.E(),stack,heap)
+            val = expr.E()
+            #print("isExpr")
             while(not isValue(val) and (type(val) != str) and (type(val) != float) and(type(val) != bool)):
                 val = step(val,stack,heap)
-            print(str(step(val,stack,heap)))
+            valFinal = val
+            if(not isRaw(valFinal)):
+                valFinal = step(valFinal,stack,heap)
+            if(isfloat(valFinal)):
+                if((valFinal % 1) == 0):
+                    print(str(int(valFinal)))
+                    return
+            print(str(valFinal))
         return
     #Unary Needs to refactor laters also with Binary
     elif(case(expr,Foundation.Unary) and isValue(expr.expr1())):
@@ -153,6 +192,23 @@ def step(expr,stack,heap):
     elif(case(expr,Foundation.Return)):
         return expr
 
+    #ForEach
+    elif(case(expr,Foundation.ForEach)):
+        indexName = expr.expr1()
+        start = int(expr.expr2().N())
+        end = int(expr.expr3().N())
+        scope = expr.expr4()
+        closure = expr.expr5()
+        if(closure == "<"):
+            for i in range(start,end):
+                step(subsitute(scope,Foundation.N(i),indexName),stack,heap)
+        elif(closure == "<="):
+            for i in range(start,end+1):
+                step(subsitute(scope,Foundation.N(i),indexName),stack,heap)
+        else:
+            print("Acorn: Cannot sequence range of index "+str(closure))
+            exit()
+        return expr
     #Recursive functions
     #Eq
     elif(case(expr,Foundation.Eq)):
@@ -175,14 +231,29 @@ def step(expr,stack,heap):
 
     #Var Const Malloc
     elif(case(expr,Foundation.Malloc)):
-        val = step(expr.expr3(),stack,heap)
+        val = expr.expr3()
         while((not isValue(val)) and (type(val) != str) and (type(val) != float) and (type(val) != bool)):
             val = step(val,stack,heap)
         if(expr.expr1() == "Var"):
-            heap.heap[expr.expr2().X()] = step(val,stack,heap)
+            heap.heap[expr.expr2().X()] = val
         elif(expr.expr1() == "Const"):
-            stack.stack[expr.expr2().X()] = step(val,stack,heap)
+            stack.stack[expr.expr2().X()] = val
         return
+
+    #Array
+    elif(case(expr,Foundation.Array)):
+        for i in range(0,len(expr.expr1())):
+            step(expr.expr1()[i],stack,heap)
+        return expr
+
+    #Assign
+    elif(case(expr,Foundation.Assign)):
+        name = expr.expr1().X()
+        val = step(expr.expr2(),stack,heap)
+        while((not isValue(val)) and (type(val) != str) and (type(val) != float) and (type(val) != bool)):
+            val = step(val,stack,heap)
+        heap.heap[name] = val
+        return expr
 
     #Call
     elif(case(expr,Foundation.Call)):
@@ -202,7 +273,7 @@ def step(expr,stack,heap):
 
         return Foundation.Null()
 
-    #gets
+    #stdin
     elif(case(expr,Foundation.Input)):
         castToken = input()
         return expr.cast(castToken)
@@ -222,10 +293,26 @@ def step(expr,stack,heap):
             return Foundation.Binary(expr.bop(),expr.expr1(),step(expr.expr2(),stack,heap))
         else:
             return Foundation.Binary(expr.bop(),step(expr.expr1(),stack,heap),expr.expr2())
+    #Induct Array Index
+    elif(case(expr, Foundation.Index)):
+        arrayRaw = step(expr.expr1(),stack,heap).expr1()
+        index = step(expr.expr2(),stack,heap)
+        while(not isRaw(index)):
+            index = step(index,stack,heap)
 
+        if(int(index) >= len(arrayRaw) and int(index) > -1):
+            exit("Acorn: Array out-of-bound error. Attempted at accessing index outside of Array's memory")
+        return arrayRaw[int(index)]
     #Induct If
     elif(case(expr,Foundation.If)):
         return step(Foundation.If(step(expr.expr1(),stack,heap),expr.expr2(),expr.expr3()),stack,heap)
 
     else:
-        return expr #
+        #Code should never hit this
+        print("Acorn: Uncaught exception with Parser. Please report this case: "+str(expr))
+        if(isRaw(expr)):
+            print("Error: 0x000000001")
+            #return expr #Uncomment if you're feeling risk-K
+        else:
+            print("Error: 0xdeadbeef ekk :(")
+        exit()

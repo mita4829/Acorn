@@ -1,1 +1,4 @@
-print("Hello, World!");
+var array = [0,1,1,2,3,5,8,13];
+for(i = 0<8){
+  print(array[i]);
+};

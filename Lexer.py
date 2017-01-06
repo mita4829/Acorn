@@ -98,7 +98,7 @@ class LexerClass():
                 self.rp += 2
                 self.lp = self.rp
             #+,>,<,!
-            elif(stream[r] in ['+','-','*','/','>','<','!'] and not inString):
+            elif(stream[r] in ['+','-','*','/','>','<','!','[',']',','] and not inString):
                 if(stream[l:r] != ''):
                     tokens.append(stream[l:r])
                 tokens.append(stream[r])

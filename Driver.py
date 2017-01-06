@@ -38,7 +38,7 @@ def Driver():
         ast = Tokenizer.Tokenizer(subStack,Mem)
         #print(Mem.heap)
         astp = ast.grammar()
-        #print(astp.expr1().expr2().expr2().X())
+        #print(astp)
         Parser.step(astp,Mem,Mem)
         #print(str(Mem.heap)+"heap")
         #print(str(Mem.stack)+"stack")
