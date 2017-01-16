@@ -5,7 +5,7 @@
 
 How to run: <i>python3 Driver.py \<acornfile.acorn\> </i> An alias command will be added later in the future to streamline everything. 
 
-#Documentation of Acorn Language (v1.1)
+#Documentation of Acorn Language (v1.1.1)
 Acorn is an interpreted language which does not depend upon a compiler. Its only dependence is having Python3 installed on the machine of intended coding. Acorn is very similar to Javascript. A more comprehensive tutorial will be written in the future. 
 
 <b>Syntax</b>
@@ -22,8 +22,8 @@ Acorn is an interpreted language which does not depend upon a compiler. Its only
 <p>As of Acorn 1.1, the language is a dynamic-scope langauge. It is recommended to not use the same variable name anywhere in the Acorn code regardless of scope due to dynamic-scoping, otherwise, declaration of the same variable name will result in overwriting the previous value stored in memory bound to that variable name. Declaring variable example <code>var x = 0;</code>variables can be bounded to values or homogenous-typed expressions. Declaring constant example <code> const e = 2.718; </code></p>
 <p>Assigning variables <code>var pi = 3.15; pi = 3.14159;</code></p>
 
-<b>Arrays</b>
-<p>Acorn 1.1 now provides non-mutable arrays. Example: <code>var fib = [0,1,1,2,3,5,8]; var nthFib = fib[n];</code></p>
+<b>Arrays <i>(beta)</i></b>
+<p>Acorn 1.1.1 now provides semi-mutable arrays. Example: <code>var fib = [0,1,1,2,3,5,8]; var nthFib = fib[n];</code></p>
 <b>Functions <i>(beta)</i></b>
 <p>Functions are limited in v1.1. Function declaration cannot be anonymous and must be bound to a variable name. All functions are required to return at the end of the function body. Functions currently take only one arguments. Function example: <code>
 var f = function(x){
@@ -59,4 +59,7 @@ Example: <br><code> for(i = 0&lt;=9){ print(i); };</code> prints 0 to 9.
 <i>Individuals who find bugs with Acorn will recieve recognition below</i>
 <ul>
 <li>1.1 Fix string comparison giving false negatives during conditional checks.</li>
+<li>1.1.1 Fix strings being handled incorrectly when interpreted which lead to negatives during conditional checks.</li>
+<li>1.1.1 Fix forloop bodies which did not handle more than one statement.</li>
+<li>1.1.1 Fix binary logicial operators which gave incorrect results due to evaluation phase of interpretation.</li>
 </ul>
