@@ -1,4 +1,6 @@
-var array = [0,1,1,2,3,5,8,13];
-for(i = 0<8){
-  print(array[i]);
+var fib = [0,1,1,2,3,5,8,13,21];
+
+for(i = 0<9){
+  const nth = fib[i];
+  print(nth);
 };

@@ -25,7 +25,7 @@ def Driver():
     dataFile = open(argument,"r")
     #raw is a whole string which is the whole Acorn script
     raw = dataFile.read()
-
+    dataFile.close()
     acorn = Lexer.LexerClass()
     acorn.lexer(raw)
 
@@ -38,9 +38,9 @@ def Driver():
         ast = Tokenizer.Tokenizer(subStack,Mem)
         #print(Mem.heap)
         astp = ast.grammar()
-        #print(astp)
+        #print(astp.expr1())
         Parser.step(astp,Mem,Mem)
         #print(str(Mem.heap)+"heap")
         #print(str(Mem.stack)+"stack")
-    dataFile.close()
+
 Driver()

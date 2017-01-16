@@ -63,8 +63,6 @@ class Tokenizer():
         elif(self.current == '['):
             self.next()
             return self.array_grammar()
-        elif(self.current == '}'):
-            return
         elif(type(self.current) == str):
             val = Foundation.S(self.current[1:-1])
             self.next() #)
@@ -137,6 +135,9 @@ class Tokenizer():
         self.next()
         self.next()
         scope = self.grammar()
+        #check for more of if statement body
+        while(self.current != '}'):
+            scope = Foundation.Seq(scope,self.grammar())
         self.MemoryState.variableNames.remove(indexVar)
         return Foundation.ForEach(indexVar,start,end,scope,closure)
     def function_grammar(self):

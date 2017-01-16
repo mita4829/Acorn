@@ -8,7 +8,7 @@ import Memory
 def case(expr,typep):
     return isinstance(expr,typep)
 def isValue(expr):
-    return isinstance(expr,Foundation.N) or isinstance(expr,Foundation.B) or isinstance(expr,Foundation.S) or isinstance(expr,Foundation.Null) or isinstance(expr,Foundation.Var) or isinstance(expr,Foundation.Function) or isinstance(expr,Foundation.Array)
+    return isinstance(expr,Foundation.N) or isinstance(expr,Foundation.B) or isinstance(expr,Foundation.S) or isinstance(expr,Foundation.Null)  or isinstance(expr,Foundation.Function) or isinstance(expr,Foundation.Array)
 def isfloat(n):
     try:
         float(n)
@@ -86,6 +86,10 @@ def subsitute(expr,value,x):
     #Index
     elif(case(expr, Foundation.Index)):
         return Foundation.Index(expr.expr1(),subsitute(expr.expr2(),value,x))
+    elif(case(expr,Foundation.Assign)):
+        if(case(expr.expr1(),Foundation.Index)):
+            return Foundation.Assign(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
+        return Foundation.Assign(expr.expr1(),subsitute(expr.expr2(),value,x))
     else:
         print(expr)
         print("Uncaught subsitute")
@@ -212,22 +216,58 @@ def step(expr,stack,heap):
     #Recursive functions
     #Eq
     elif(case(expr,Foundation.Eq)):
-        return Foundation.B(step(expr.expr1(),stack,heap) == step(expr.expr2(),stack,heap))
+        e1 = expr.expr1()
+        e2 = expr.expr2()
+        while(not isValue(e1)):
+            e1 = step(e1,stack,heap)
+        while(not isValue(e2)):
+            e2 = step(e1,stack,heap)
+        return Foundation.B(step(e1,stack,heap) == step(e2,stack,heap))
     #Ne
     elif(case(expr,Foundation.Ne)):
-        return Foundation.B(step(expr.expr1(),stack,heap) != step(expr.expr2(),stack,heap))
+        e1 = expr.expr1()
+        e2 = expr.expr2()
+        while(not isValue(e1)):
+            e1 = step(e1,stack,heap)
+        while(not isValue(e2)):
+            e2 = step(e1,stack,heap)
+        return Foundation.B(step(e1,stack,heap) != step(e2,stack,heap))
     #Lt
     elif(case(expr,Foundation.Lt)):
-        return Foundation.B(step(expr.expr1(),stack,heap) < step(expr.expr2(),stack,heap))
+        e1 = expr.expr1()
+        e2 = expr.expr2()
+        while(not isValue(e1)):
+            e1 = step(e1,stack,heap)
+        while(not isValue(e2)):
+            e2 = step(e1,stack,heap)
+        return Foundation.B(step(e1,stack,heap) < step(e2,stack,heap))
     #Le
     elif(case(expr,Foundation.Le)):
-        return Foundation.B(step(expr.expr1(),stack,heap) <= step(expr.expr2(),stack,heap))
+        e1 = expr.expr1()
+        e2 = expr.expr2()
+        while(not isValue(e1)):
+            e1 = step(e1,stack,heap)
+        while(not isValue(e2)):
+            e2 = step(e1,stack,heap)
+        return Foundation.B(step(e1,stack,heap) <= step(e2,stack,heap))
     #Ge
     elif(case(expr,Foundation.Ge)):
-        return Foundation.B(step(expr.expr1(),stack,heap) >= step(expr.expr2(),stack,heap))
+        e1 = expr.expr1()
+        e2 = expr.expr2()
+        while(not isValue(e1)):
+            e1 = step(e1,stack,heap)
+        while(not isValue(e2)):
+            e2 = step(e1,stack,heap)
+        return Foundation.B(step(e1,stack,heap) >= step(e2,stack,heap))
     #Gt
     elif(case(expr,Foundation.Gt)):
-        return Foundation.B(step(expr.expr1(),stack,heap) > step(expr.expr2(),stack,heap))
+        e1 = expr.expr1()
+        e2 = expr.expr2()
+        while(not isValue(e1)):
+            e1 = step(e1,stack,heap)
+        while(not isValue(e2)):
+            e2 = step(e1,stack,heap)
+        return Foundation.B(step(e1,stack,heap) > step(e2,stack,heap))
 
     #Var Const Malloc
     elif(case(expr,Foundation.Malloc)):
@@ -248,6 +288,12 @@ def step(expr,stack,heap):
 
     #Assign
     elif(case(expr,Foundation.Assign)):
+        if(case(expr.expr1(),Foundation.Index)):
+            arrayRaw = heap.heapCall(expr.expr1().expr1().X())
+            index = int(step(expr.expr1(),stack,heap).N())
+            valToAssign = expr.expr2()
+            arrayRaw.expr1()[index] = valToAssign
+            return expr
         name = expr.expr1().X()
         val = step(expr.expr2(),stack,heap)
         while((not isValue(val)) and (type(val) != str) and (type(val) != float) and (type(val) != bool)):
