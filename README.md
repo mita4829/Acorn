@@ -59,7 +59,7 @@ Example: <br><code> for(i = 0&lt;=9){ print(i); };</code> prints 0 to 9.
 <i>Individuals who find bugs with Acorn will recieve recognition below</i>
 <ul>
 <li>1.1 Fix string comparison giving false negatives during conditional checks.</li>
-<li>1.1.1 Fix strings being handled incorrectly when interpreted which lead to negatives during conditional checks.</li>
+<li>1.1.1 Fix strings being handled incorrectly when interpreted which led to negatives during conditional checks.</li>
 <li>1.1.1 Fix forloop bodies which did not handle more than one statement.</li>
 <li>1.1.1 Fix binary logicial operators which gave incorrect results due to evaluation phase of interpretation.</li>
 </ul>
