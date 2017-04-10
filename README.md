@@ -1,7 +1,7 @@
 ![Alt text](https://github.com/mita4829/Acorn/blob/master/AcornHero.jpg "Acorn 1.1")
 # Acorn
 [![Build Status](https://travis-ci.org/mita4829/Acorn.svg?branch=master)](https://travis-ci.org/mita4829/Acorn)
-<br/>A simple interpreted programming language builded upon Python. 
+<br/>A simple interpreted programming language built upon Python. 
 
 How to run: <i>python3 Driver.py \<acornfile.acorn\> </i> An alias command will be added later in the future to streamline everything. 
 
