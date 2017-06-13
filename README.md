@@ -5,7 +5,7 @@
 
 How to run: <i>python3 Driver.py \<acornfile.acorn\> </i> An alias command will be added later in the future to streamline everything. 
 
-<b>Documentation of Acorn Language (v1.1.1)<b>
+<b>Documentation of Acorn Language (v1.1.1)</b>
 Acorn is an interpreted language which does not depend upon a compiler. Its only dependence is having Python3 (working up to 3.6) installed on the machine of intended coding. Acorn is very similar to Javascript. A more comprehensive tutorial will be written in the future. 
 
 <b>Syntax</b>
