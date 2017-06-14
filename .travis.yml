@@ -1,6 +1,6 @@
 language: python
 python:
   - "3.6"
+  - "3.5"
 script:
-  - python3.6 Driver.py Hello.acorn
-  - python3.5 Driver.py Hello.acorn
+  - python3 Driver.py Hello.acorn
