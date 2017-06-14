@@ -3,4 +3,5 @@ python:
   - "3.5"
   - "3.6"
 script:
-  - make Acorn
+  - python3.6 Driver.py Hello.acorn
+  - python3.5 Driver.py Hello.acorn
