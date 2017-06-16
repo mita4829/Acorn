@@ -1,15 +1,15 @@
 all:
 		clear
-		python3 Driver.py Hello.acorn
+		python3.6 Driver.py Hello.acorn
 Foundation:
-		python3 Foundation.py
+		python3.6 Foundation.py
 Lexer:
-		python3 Lexer.py
+		python3.6 Lexer.py
 Parser:
-		python3 Parser.py
+		python3.6 Parser.py
 Scanner:
-		python3 Driver.py
+		python3.6 Driver.py
 Acorn:
-		python3 Driver.py Hello.acorn
+		python3.6 Driver.py Hello.acorn
 Tokenizer:
-		python3 Tokenizer.py
+		python3.6 Tokenizer.py

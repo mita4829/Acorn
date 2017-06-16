@@ -1,6 +1,35 @@
-var fib = [0,1,1,2,3,5,8,13,21];
+println("Example of defining variables");
+var a = 40;
+var b = 2;
+var c = a+b
+println(c);
 
-for(i = 0<9){
-  const nth = fib[i];
-  print(nth);
+println("Example of if statements");
+if(c == 0){
+    println("Should not pass");
+}else if(c == 42){
+    println("The answer to everything");
+}else{
+    println("Some higher dimension number?");
 };
+
+println("Example of for loops");
+for(var i = 0; i<3; i=i+1){
+    println(i);
+};
+
+println("Example of while loops");
+var z = 0;
+while(z < 5){
+    z = z+1;
+};
+
+println("Example of functions");
+var f = function(n){
+   if(n == 0){
+       return 1;
+   };
+   return f(n-1)*n;
+};
+print("Factorial of 5 is: ");
+println(f(5));

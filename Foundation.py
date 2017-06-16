@@ -1,7 +1,14 @@
+# Acorn 2.0: Cocoa Butter
+# Booleans are treated as integers
+# Allow hex 
+
 #Number meta class
 class N():
     def __init__(self,n):
-        self.n = float(n)
+        try:
+            self.n = float(n)
+        except:
+            self.n = int(n,16)
     def N(self):
         return self.n
 
@@ -11,17 +18,17 @@ class B():
         self.boolean = b
     def B(self):
         if(self.boolean == "true"):
-            return True
+            return 1
         elif(self.boolean == "false"):
-            return False
+            return 0
         elif(isinstance(self.boolean,B)):
-            return (self.boolean).B()
+            return int((self.boolean).B())
         elif(isinstance(self.boolean,N)):
-            return bool(self.boolean.N())
+            return int(bool(self.boolean.N()))
         elif(self.boolean == True):
-            return True
+            return 1
         else:
-            return False
+            return 0
 
 #String meta class
 class S():
@@ -167,6 +174,42 @@ class Ge():
     def expr2(self):
         return self.e2
 
+class And():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class Or():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class BitwiseAnd():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class BitwiseOr ():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
 class Malloc():
     def __init__(self,m,x,v):
         self.e1 = m
@@ -220,8 +263,41 @@ class ForEach():
         return self.e4
     def expr5(self):
         return self.e5
+
+class For():
+    def __init__(self,index,condition,count,scope):
+        self.e1 = index
+        self.e2 = condition
+        self.e3 = count
+        self.e4 = scope
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+    def expr3(self):
+        return self.e3
+    def expr4(self):
+        return self.e4
+
+class While():
+    def __init__(self,condition,scope):
+        self.e1 = condition
+        self.e2 = scope
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+
 #Side effects
 class Print():
+    def __init__(self,expr):
+        self.expr1 = expr
+    def E(self):
+        return self.expr1
+
+#Side effects
+class Println():
     def __init__(self,expr):
         self.expr1 = expr
     def E(self):
@@ -247,3 +323,4 @@ def isfloat(n):
         return True
     except:
         return False
+

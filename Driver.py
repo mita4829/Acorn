@@ -4,6 +4,7 @@ import Tokenizer
 import Parser
 import Foundation
 import Memory
+#import time
 
 WHITE = "\x1B[0m"
 RED = "\x1B[31m"
@@ -32,6 +33,7 @@ def Driver():
     #Send tokens to tokenizer and get an Abstract syntax tree back: ast is a 2nd array
     acornStackFrame = acorn.stackFrame
     Mem = Memory.Memory()
+    #s = time.time()
     for i in range(0,len(acornStackFrame)):
         subStack = acornStackFrame[i]
         #print(subStack)
@@ -39,8 +41,12 @@ def Driver():
         #print(Mem.heap)
         astp = ast.grammar()
         #print(astp.expr1())
-        Parser.step(astp,Mem,Mem)
-        #print(str(Mem.heap)+"heap")
-        #print(str(Mem.stack)+"stack")
+        #print(astp)
+        Parser.step(astp,Mem)
+    #e = time.time()
+
+#print((e-s)*1000000)
+
+
 
 Driver()
