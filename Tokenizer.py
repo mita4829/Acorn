@@ -459,7 +459,7 @@ class Tokenizer():
 
     def factor_grammar(self):
         result = self.bitUnion_grammar()
-        while(self.current in ['*','%','/',"->"]):
+        while(self.current in ['*','%','/',"~>"]):
             if(self.current == '*'):
                 self.next()
                 result = Foundation.Binary("Times",result,self.bitUnion_grammar())
@@ -469,7 +469,7 @@ class Tokenizer():
             elif(self.current == '/'):
                 self.next()
                 result = Foundation.Binary("Div",result,self.bitUnion_grammar())
-            elif(self.current == "->"):
+            elif(self.current == "~>"):
                 self.next()
                 tau = self.cast_grammar();
                 result = Foundation.Cast(result,tau)
