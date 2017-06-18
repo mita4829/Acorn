@@ -19,9 +19,11 @@
 <ul>
 <li>Modulo operator</li>
 <li>Logical And & Or</li>
-<li>Bitwise And & Or</li>
+<li>Bit And & Or</li>
+<li>Bit left & right shift</li>
+<li>Bit invert</li>
 <li>Fix issue in 1.1.1 were banged and negated expression/value fail to work</li>
-<li>Operation order of precdence from lowest to highest: ||, &&, {<,<=,==,>=,>}, {+,-}, {*,/,%}, |, &, -, !, (expression)</li>
+<li>Operation order of precdence from lowest to highest: ||, &&, {<,<=,==,>=,>,<<,>>}, {+,-}, {*,/,%,~>}, |, &, {-, !, ~},  (expression)</li>
 </ul>
 <b>Function</b>
 <ul>
@@ -33,9 +35,19 @@
 <ul>
 <li>Else if statement are now available in Cocoa</li>
 </ul>
+<b>For loops</b>
+<ul>
+<li>Cocoa offers full-featured for loops with index variable, condition, and counter, delegate to the responsibility of the code</li>
+<li>For loops can be nested now</li>
+<li>Basic for loops in 1.1.1 have been demoted to foreach loop</li>
+</ul>
 <b>While loops</b>
 <ul>
 <li>Cocoa offers while loops</li>
+</ul>
+<b>Casting</b>
+<ul>
+Cocoa offers basic casting of variables to other primative types
 </ul>
 <b>Behavior</b>
 <ul>
@@ -67,7 +79,7 @@ Acorn is an interpreted language which does not depend upon a compiler. Its only
 <code>println("Hi newline");</code>
 
 <b>Conditionals</b>
-<p>If statements have similar syntax as Javascript. <br/><code>if(true){ print("This is true!"); }else{ print("This is false"); };</code><br/>Acorn does not support else if conditions. The boolean expression being evaluated will be casted to be of type boolean. Expressions to be casted to booleans are <i>Logical Operations and Numbers</i>.</p>
+<p>If statements have similar syntax as Javascript. <br/><code>if(true){ print("This is true!"); }else{ print("This is false"); };</code><br/>The boolean expression being evaluated will be casted to be of type boolean. Expressions to be casted to booleans are <i>Logical Operations and Numbers</i>.</p>
 
 <b>Variables</b>
 <p>Declaring variable example <code>var x = 0;</code>variables can be bounded to values or homogenous-typed expressions. Constants have been deprecated from Cocoa</p>
@@ -88,6 +100,14 @@ var f = function(x){
 <b>For Loop</b>
 <p>For loops:
 <code>for(var i = 0; i<10; i=i+1){ ... }</code>
+
+<b>Casting</b>
+<p>Expressions when called with the cast operator <code>~></code> will attempt to cast to the desired type. Upon sucess, the expression will be the new type. Upon failure, a run time error will be thrown</p>
+<p>Cocoa supports casting to types: <code>(Int)</code>, <code>(Float)</code>, <code>(Bool)</code>, <code>(String)</code>. 
+</p>
+<p>Example casting an integer to a string.</p>
+<code>var str = "I have "+3~>(String)+" apples."</code> 
+<p>Will evaulate to the string being, <code>I have 3.0 apples</code>.</p>
 
 <b>For Each</b>
 <p>For loops in Acorn 1.1.1 has be demoted to <code>foreach</code> loops. Foreach loops should be taken advantage for speed when simple iterations are needed.</p>
