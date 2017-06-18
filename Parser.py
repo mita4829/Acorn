@@ -20,97 +20,7 @@ def isfloat(n):
         return True
     except:
         return False
-'''
-def subsitute(expr,value,x):
-    #N
-    if(case(expr,Foundation.N)):
-        return expr
-    #B
-    elif(case(expr,Foundation.B)):
-        return expr
-    #S
-    elif(case(expr,Foundation.S)):
-        return expr
-    #Null
-    elif(case(expr,Foundation.Null)):
-        return expr
-    #Var
-    elif(case(expr,Foundation.Var)):
-        if(x == expr.X()):
-            return value
-        else:
-            return expr
-    #Array
-    elif(case(expr,Foundation.Array)):
-        subArray = []
-        for i in range(0,len(expr.expr1())):
-            subArray.append(subsitute(expr.expr1()[i],value,x))
-        return Foundation.Array(subArray)
-    #Binary
-    elif(case(expr,Foundation.Binary)):
-        return Foundation.Binary(expr.bop(),subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
 
-    #Eq
-    elif(case(expr,Foundation.Eq)):
-        return Foundation.Eq(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
-    #Ne
-    elif(case(expr,Foundation.Ne)):
-        return Foundation.Ne(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
-    #Lt
-    elif(case(expr,Foundation.Lt)):
-        return Foundation.Lt(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
-    #Le
-    elif(case(expr,Foundation.Le)):
-        return Foundation.Le(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
-    #Ge
-    elif(case(expr,Foundation.Ge)):
-        return Foundation.Ge(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
-    #Gt
-    elif(case(expr,Foundation.Gt)):
-        return Foundation.Gt(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
-    #Or
-    elif(case(expr,Foundation.Or)):
-        return Foundation.Or(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
-    #And
-    elif(case(expr,Foundation.And)):
-        return Foundation.And(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
-    #If
-    elif(case(expr,Foundation.If)):
-        return Foundation.If(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x),subsitute(expr.expr3(),value,x))
-    #Seq
-    elif(case(expr,Foundation.Seq)):
-        e1 = subsitute(expr.expr1(),value,x)
-        e2 = subsitute(expr.expr2(),value,x)
-        return Foundation.Seq(e1,e2)
-    #Call
-    elif(case(expr,Foundation.Call)):#Extend list to allow recursion
-        sbtBody = subsitute(expr.expr2(),value,x)
-        sbtArg = []
-        for i in range(0,len(expr.expr1())):
-            sbtArg.append(subsitute(expr.expr1()[i],value,x))
-        return Foundation.Call(sbtArg,sbtBody)
-    #Return
-    elif(case(expr,Foundation.Return)):
-        return Foundation.Return(subsitute(expr.expr1(),value,x))
-    #print
-    elif(case(expr,Foundation.Print)):
-        return Foundation.Print(subsitute(expr.E(),value,x))
-    #Malloc
-    elif(case(expr,Foundation.Malloc)):
-        return Foundation.Malloc("Var",expr.expr2(),subsitute(expr.expr3(),value,x))
-    #Index
-    elif(case(expr, Foundation.Index)):
-        return Foundation.Index(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
-    elif(case(expr,Foundation.Assign)):
-        if(case(expr.expr1(),Foundation.Index)):
-            return Foundation.Assign(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x))
-        return Foundation.Assign(expr.expr1(),subsitute(expr.expr2(),value,x))
-    elif(case(expr,Foundation.For)):
-        return Foundation.For(subsitute(expr.expr1(),value,x),subsitute(expr.expr2(),value,x),subsitute(expr.expr3(),value,x),subsitute(expr.expr4(),value,x))
-    else:
-        print(expr)
-        print("Uncaught subsitute")
-'''
 
 def step(expr,Env):
     #N
@@ -142,7 +52,7 @@ def step(expr,Env):
             value = step(value,Env)
         value = step(value,Env)
         newline = ''
-        if(case(expr,Foundation.Println)):
+        if(case(expr,Foundation.Print)):
             newline = '\n'
         if(isfloat(value)):
             if((value % 1) == 0):
@@ -162,6 +72,8 @@ def step(expr,Env):
             return Foundation.N(-1*step(expr.expr1(),Env))
         elif(expr.uop() == "Not"):
             return Foundation.B(not step(expr.expr1(),Env))
+        elif(expr.uop() == "Inv"):
+            return Foundation.N(~int(step(expr.expr1(),Env)))
 
     #Binary
     elif(case(expr,Foundation.Binary) and isValue(expr.expr1()) and isValue(expr.expr2())):
@@ -267,8 +179,26 @@ def step(expr,Env):
         if(a):
             return Foundation.B(True)
         return Foundation.B(step(expr.expr2(),Env))
-    
 
+    #Left
+    elif(case(expr,Foundation.LeftShift) and isValue(expr.expr1()) and isValue(expr.expr2())):
+        p = step(expr.expr1(),Env)
+        q = step(expr.expr2(),Env)
+        return Foundation.N(int(p) << int(q))
+
+    #Left
+    elif(case(expr,Foundation.RightShift) and isValue(expr.expr1()) and isValue(expr.expr2())):
+        p = step(expr.expr1(),Env)
+        q = step(expr.expr2(),Env)
+        return Foundation.N(int(p) >> int(q))
+
+    #cast
+    elif(case(expr,Foundation.Cast) and isValue(expr.expr1())):
+        value = step(expr.expr1(),Env)
+        t = expr.cast(value,expr.expr2())
+        if(not t):
+            exit("Dynamic run time error, cannot cast "+str(value)+" to type "+str(expr.expr2()))
+        return t
 
     #Call
     elif(case(expr,Foundation.Call)):
@@ -535,7 +465,7 @@ def step(expr,Env):
             return step(Foundation.BitwiseOr(expr.expr1(),expr2),Env)
         elif(e2):
             expr1 = step(expr.expr1(),Env)
-        return step(Foundation.BitwiseOr(expr1,expr.expr2()),Env)
+            return step(Foundation.BitwiseOr(expr1,expr.expr2()),Env)
         expr1 = step(expr.expr1(),Env)
         expr2 = step(expr.expr2(),Env)
         
@@ -550,21 +480,59 @@ def step(expr,Env):
             return step(Foundation.BitwiseAnd(expr.expr1(),expr2),Env)
         elif(e2):
             expr1 = step(expr.expr1(),Env)
-        return step(Foundation.BitwiseAnd(expr1,expr.expr2()),Env)
+            return step(Foundation.BitwiseAnd(expr1,expr.expr2()),Env)
         expr1 = step(expr.expr1(),Env)
         expr2 = step(expr.expr2(),Env)
         
         return step(Foundation.BitwiseAnd(expr1,expr2),Env)
 
+    elif(case(expr,Foundation.LeftShift)):
+        e1 = isValue(expr.expr1())
+        e2 = isValue(expr.expr2())
+        
+        if(e1):
+            expr2 = step(expr.expr2(),Env)
+            return step(Foundation.LeftShift(expr.expr1(),expr2),Env)
+        elif(e2):
+            expr1 = step(expr.expr1(),Env)
+            return step(Foundation.LeftShift(expr1,expr.expr2()),Env)
+        expr1 = step(expr.expr1(),Env)
+        expr2 = step(expr.expr2(),Env)
+        
+        return step(Foundation.LeftShift(expr1,expr2),Env)
+
+    elif(case(expr,Foundation.RightShift)):
+        e1 = isValue(expr.expr1())
+        e2 = isValue(expr.expr2())
+        
+        if(e1):
+            expr2 = step(expr.expr2(),Env)
+            return step(Foundation.RightShift(expr.expr1(),expr2),Env)
+        elif(e2):
+            expr1 = step(expr.expr1(),Env)
+            return step(Foundation.RightShift(expr1,expr.expr2()),Env)
+        expr1 = step(expr.expr1(),Env)
+        expr2 = step(expr.expr2(),Env)
+        
+        return step(Foundation.RightShift(expr1,expr2),Env)
 
     #Assign Expr
     elif(case(expr,Foundation.Assign)):
         return step(Foundation.Assign(expr.expr1(),step(expr.expr2(),Env)),Env)
 
+    elif(case(expr,Foundation.Unary)):
+        expr1 = step(expr.expr1(),Env)
+        return step(Foundation.Unary(expr.uop(),expr1),Env)
+
     #Index Expr
     elif(case(expr,Foundation.Index)):
         index = step(expr.expr2(),Env)
         return step(Foundation.Index(expr.expr1(),index),Env);
+
+    elif(case(expr,Foundation.Cast)):
+        e1 = step(expr.expr1(),Env)
+        return step(Foundation.Cast(e1,expr.expr2()),Env)
+
     else:
         print("Uncaught parse step:"+str(expr))
         return Foundation.Null()

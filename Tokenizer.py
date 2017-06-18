@@ -416,7 +416,7 @@ class Tokenizer():
 
     def logical_grammar(self):
         result = self.number_grammar()
-        while(self.current in ["<=","==",">=","!=",'<','>','=']):
+        while(self.current in ["<=","==",">=","!=",'<','>','=',"<<",">>"]):
             if(self.current == '<'):
                 self.next()
                 result = Foundation.Lt(result,self.number_grammar())
@@ -438,6 +438,12 @@ class Tokenizer():
             elif(self.current == "="):
                 self.next()
                 result = Foundation.Assign(result,self.grammar())
+            elif(self.current == "<<"):
+                self.next()
+                result = Foundation.LeftShift(result,self.number_grammar())
+            elif(self.current == ">>"):
+                self.next()
+                result = Foundation.RightShift(result,self.number_grammar())
         return result
 
     def number_grammar(self):
@@ -453,16 +459,20 @@ class Tokenizer():
 
     def factor_grammar(self):
         result = self.bitUnion_grammar()
-        while(self.current in ['*','%','/']):
+        while(self.current in ['*','%','/',"->"]):
             if(self.current == '*'):
                 self.next()
                 result = Foundation.Binary("Times",result,self.bitUnion_grammar())
-            if(self.current == '%'):
+            elif(self.current == '%'):
                 self.next()
                 result = Foundation.Binary("Mod",result,self.bitUnion_grammar())
             elif(self.current == '/'):
                 self.next()
                 result = Foundation.Binary("Div",result,self.bitUnion_grammar())
+            elif(self.current == "->"):
+                self.next()
+                tau = self.cast_grammar();
+                result = Foundation.Cast(result,tau)
 
         return result
 
@@ -486,13 +496,16 @@ class Tokenizer():
 
     def nots_grammar(self):
         result = self.atom_grammar()
-        while(self.current in ['!','-'] and isinstance(result,Foundation.Null)):
+        while(self.current in ['!','-','~'] and isinstance(result,Foundation.Null)):
             if(self.current == '!'):
                 self.next()
                 result = Foundation.Unary("Not",self.atom_grammar())
             elif(self.current == '-' ):
                 self.next()
                 result = Foundation.Unary("Neg",self.atom_grammar())
+            elif(self.current == '~'):
+                self.next()
+                result = Foundation.Unary("Inv",self.atom_grammar())
         return result
 
     def atom_grammar(self):
@@ -516,7 +529,7 @@ class Tokenizer():
         elif(isstr(self.current)):
             result = Foundation.S(self.current[1:-1])
             self.next()
-        elif(self.current in ["!","-"]):
+        elif(self.current in ["!","-","~"]):
             return result
         else:
             cAssert(str(self.current),"defined variable","Undefined usage of "+str(self.current)+" Null has been returned")
@@ -567,5 +580,24 @@ class Tokenizer():
     
         self.next()
         return argList
+
+    #Cast
+    def cast_grammar(self):
+        cAssert(self.current,'(',"Improper syntax for cast")
+        self.next()
+        tau = Foundation.Null()
+        if(self.current == "Int"):
+            tau = Foundation.TInt()
+        elif(self.current == "Float"):
+            tau = Foundation.TFloat()
+        elif(self.current == "String"):
+            tau = Foundation.TS()
+        elif(self.current == "Bool"):
+            tau = Foundation.TB()
+        self.next()
+        cAssert(self.current,')',"Cast expected closing )")
+        self.next()
+        return tau
+
 #t = Tokenizer(['var','f','=','function','(','9',',','10',')','{','return','9',';','}',';'],Memory.Memory())
 #print(t.grammar())

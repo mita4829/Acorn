@@ -201,7 +201,25 @@ class BitwiseAnd():
     def expr2(self):
         return self.e2
 
-class BitwiseOr ():
+class BitwiseOr():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class LeftShift():
+    def __init__(self,e1,e2):
+        self.e1 = e1
+        self.e2 = e2
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class RightShift():
     def __init__(self,e1,e2):
         self.e1 = e1
         self.e2 = e2
@@ -315,6 +333,56 @@ class Input():
             return Null()
         return S(n)
 
+class Cast():
+    def __init__(self,value,type):
+        self.e1 = value
+        self.e2 = type
+    def cast(self,value,type):
+        if(isinstance(type,TInt)):
+            try:
+                n = N(int(value))
+                return n
+            except:
+                return False
+        elif(isinstance(type,TS)):
+            try:
+                s = S(str(value))
+                return s
+            except:
+                return False
+        elif(isinstance(type,TFloat)):
+            try:
+                f = N(float(value))
+                return f
+            except:
+                return False
+        elif(isinstance(type,TB)):
+            try:
+                b = B(bool(value))
+                return b
+            except:
+                return False
+        return False
+    def expr1(self):
+        return self.e1
+    def expr2(self):
+        return self.e2
+
+class TInt():
+    def __init__(self):
+        self.e1 = None
+
+class TFloat():
+    def __init__(self):
+        self.e1 = None
+
+class TB():
+    def __init__(self):
+        self.e1 = None
+
+class TS():
+    def __init__(self):
+        self.e1 = None
 
 #Helper functions
 def isfloat(n):
