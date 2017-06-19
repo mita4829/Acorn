@@ -72,18 +72,18 @@ Acorn is an interpreted language which does not depend upon a compiler. Its only
 
 # How to run
 
-To start coding in Acorn, open up <code>Hello.acorn</code> within the Acorn folder try a simple 'Hello World' program as described under Printing. To run, within the same location, navigate through Terminal to the location of <code>Hello.acorn</code> and run.
+To start coding in Acorn on MacOS, clone or download the Acorn directory onto your desktop. Inside the Acorn folder, run the <code>setup</code> executable, and it should set up an Acorn environment. To test if it's working, create a file on your desktop called <code>Hello.acorn</code> and write a simple 'Hello World' program described below. Navigate through terminal to the file's location and run
 
 ```
-python3.6 Driver.py Hello.acorn
-``` 
+cocoa Hello.acorn
+```
+
 If sucessful, your 'Hello World' program should output:
 
 ```
 Hello, World from Acorn!
 ```
 
-A Bash script will be add in the future to move this to <code>/usr/bin/</code> in the near future. 
 
 <b>Syntax</b>
 <p>All Acorn files must have the extention of <code>.acorn</code> All statements in Acorn must be finished with a semi-colon (including if statements and functions).</p>
