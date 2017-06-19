@@ -67,22 +67,23 @@ Cocoa offers basic casting of variables to other primative types
 <li>Cocoa improves the speed of certain tasks. Recursive functions are <code>19%</code> more efficent in Cocoa. Nested for loops were implemented in Acorn 1.1.1 under its environment and tested again Cocoa. Cocoa showed a <code>7%</code> speed improvement.
 </ul>
 
-How to run. To start coding in Acorn, open up <code>Hello.acorn</code> within the Acorn folder try a simple 'Hello World' program as described under Printing. To run, within the same location, navigate through Terminal to the location of <code>Hello.acorn</code> and run.
+# Documentation of Acorn Language (v2.0)
+Acorn is an interpreted language which does not depend upon a compiler. Its only dependence is having Python3 (working up to 3.6) installed on the machine of intended coding. Acorn is very similar to Javascript. A more comprehensive tutorial will be written in the future. 
+
+# How to run
+
+To start coding in Acorn, open up <code>Hello.acorn</code> within the Acorn folder try a simple 'Hello World' program as described under Printing. To run, within the same location, navigate through Terminal to the location of <code>Hello.acorn</code> and run.
 
 ```
-python3.6 Driver.py <acornfile.acorn>
+python3.6 Driver.py Hello.acorn
 ``` 
 If sucessful, your 'Hello World' program should output:
 
 ```
-Hello World
+Hello, World from Acorn!
 ```
 
 A Bash script will be add in the future to move this to <code>/usr/bin/</code> in the near future. 
-
-
-<b>Documentation of Acorn Language (v2.0)</b>
-Acorn is an interpreted language which does not depend upon a compiler. Its only dependence is having Python3 (working up to 3.6) installed on the machine of intended coding. Acorn is very similar to Javascript. A more comprehensive tutorial will be written in the future. 
 
 <b>Syntax</b>
 <p>All Acorn files must have the extention of <code>.acorn</code> All statements in Acorn must be finished with a semi-colon (including if statements and functions).</p>
@@ -127,9 +128,8 @@ if(0){
 };
 ```
 
-<p>The clause binded to the first If statement will execute if the condition evaulates to true. The condition will first be casted as a boolean. Expression/Values that evualate to true are: booleans that are true, non-zero numbers, non-empty strings.</p>
+<p>The clause binded to the first If statement will execute if the condition evaulates to true. The condition will first be casted as a boolean. Expression/Values that evualate to true are: booleans that are true, non-zero numbers, non-empty string, logical conditions evaluating to true, and bitwise conditions evaluating to true</p>
 
-<br/>The boolean expression being evaluated will be casted to be of type boolean. Expressions to be casted to booleans are <i>Logical Operations and Numbers</i>.</p>
 
 <b>Variables</b>
 <p>Declaring variable example:
@@ -156,7 +156,7 @@ var fib = [0,1,1,2,3,5,8]; var nthFib = fib[n];
 Arrays in Cocoa may handle non-homogenous type expressions. An array's size is fix upon declaration. An array may be indexed as given in the example above; array start at index 0. 
 </p>
 <b>Functions</b>
-<p>Function declaration cannot be anonymous, and they must be bound to a variable name. All functions are required to return at the end of the function body. Functions may take zero to multiple arugments. Functions return Null on void return-type functions. Function example: 
+<p>Function declaration cannot be anonymous; they must be bound to a variable name. All functions are required to return at the end of the function body. Functions may take zero to multiple arugments. Functions return Null on void return-type functions. Function example: 
 
 ```
 var f = function(x){
@@ -217,7 +217,7 @@ foreach( i = 0 < 10 ){
 <i>Individuals who find bugs with Acorn will recieve recognition below</i>
 <ul>
 <li>1.1 Fix string comparison giving false negatives during conditional checks.</li>
-<li>1.1.1 Fix strings being handled incorrectly when interpreted which led to negatives during conditional checks.</li>
-<li>1.1.1 Fix forloop bodies which did not handle more than one statement.</li>
-<li>1.1.1 Fix binary logicial operators which gave incorrect results due to evaluation phase of interpretation.</li>
+<li>1.1.1 Fix strings being handled incorrectly when interpreted, which led to negatives during conditional checks.</li>
+<li>1.1.1 Fix foreach loop bodies which did not handle more than one statement.</li>
+<li>1.1.1 Fix binary logicial operators which gave incorrect results due to the evaluation phase of interpretation.</li>
 </ul>
