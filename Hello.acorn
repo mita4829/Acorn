@@ -1,4 +1,0 @@
-var p = 5;
-var q = 6;
-
-print("Hello");
