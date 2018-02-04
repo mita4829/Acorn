@@ -3,4 +3,4 @@ python:
   - "3.6"
   - "3.5"
 script:
-  - python3 /src/Driver.py /Tests/Hello.acorn
+  - python3 src/Driver.py Tests/Hello.acorn
