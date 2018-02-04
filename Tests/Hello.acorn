@@ -1,0 +1,32 @@
+print("Hello, World!");
+
+var x = 10;
+var y = 5;
+print(x/y);
+print("");
+
+print("Count to 10");
+for(var i = 1; i <= 10; i = i+1){
+    print(i);
+};
+print("");
+
+print("Mapping");
+var map = function(l, f, length){
+    for(var i = 0; i < length; i = i+1){
+	l[i] = f(l[i]);
+    };
+    return;
+};
+
+var square = function(x){
+    return x*x;
+};
+
+var l = [1,2,3];
+
+map(l, square, 3);
+
+foreach(i = 0<3){
+    print(l[i]);
+};
