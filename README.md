@@ -3,6 +3,27 @@
 [![Build Status](https://travis-ci.org/mita4829/Acorn.svg?branch=master)](https://travis-ci.org/mita4829/Acorn)
 <br/>A simple interpreted programming language built upon Python. 
 
+# Abstract
+Acorn is an interpreted language which does not depend upon a compiler. Its only dependence is having Python3 (working up to 3.6) installed on the machine of intended coding. Acorn is very similar to Javascript. A more comprehensive tutorial will be written in the future. 
+
+# Set up
+To start coding in Acorn on MacOS, clone or download the Acorn directory onto your desktop. Inside the Acorn folder, run the <code>setup</code> executable by doing
+```
+bash setup.sh
+```
+Once that is set up, to test if Acorn was sucessfully installed, create a new file on your desktop named <code>Hello.acorn</code>, so we can create a _Hello World_ program. Inside the file, have the line:
+```
+print("Hello, World from Acorn!");
+```
+In Terminal, locate the <code>Hello.acorn</code> file and run:
+```
+cocoa Hello.acorn
+```
+If sucessful, your _Hello World_ program should output:
+```
+Hello, World from Acorn!
+```
+
 # What's new in Cocoa
 <b>Strings</b>
 <ul>
@@ -67,25 +88,7 @@ Cocoa offers basic casting of variables to other primative types
 <li>Cocoa improves the speed of certain tasks. Recursive functions are <code>19%</code> more efficent in Cocoa. Nested for loops were implemented in Acorn 1.1.1 under its environment and tested again Cocoa. Cocoa showed a <code>7%</code> speed improvement.
 </ul>
 
-# Documentation of Acorn Language (v2.0)
-Acorn is an interpreted language which does not depend upon a compiler. Its only dependence is having Python3 (working up to 3.6) installed on the machine of intended coding. Acorn is very similar to Javascript. A more comprehensive tutorial will be written in the future. 
-
-# How to run
-
-To start coding in Acorn on MacOS, clone or download the Acorn directory onto your desktop. Inside the Acorn folder, run the <code>setup</code> executable, and it should set up an Acorn environment. To test if it's working, create a file on your desktop called <code>Hello.acorn</code> and write a simple 'Hello World' program described below. Navigate through terminal to the file's location and run
-
-```
-cocoa Hello.acorn
-```
-
-If sucessful, your 'Hello World' program should output:
-
-```
-Hello, World from Acorn!
-```
-
-
-<b>Syntax</b>
+# Documentation
 <p>All Acorn files must have the extention of <code>.acorn</code> All statements in Acorn must be finished with a semi-colon (including if statements and functions).</p>
 
 <b>Printing</b>
@@ -109,11 +112,6 @@ print(2.14159+1.0);
 
 </p> 
 <p>Cocoa infers the type of printed values and no longer assumes integers to be floats when printed.</p>
-<p>Printing with newline</p>
-
-```
-println("Hi newline");
-```
 
 <b>Conditionals</b>
 <p>If statements<br/>
@@ -128,35 +126,32 @@ if(0){
 };
 ```
 
-<p>The clause binded to the first If statement will execute if the condition evaulates to true. The condition will first be casted as a boolean. Expression/Values that evualate to true are: booleans that are true, non-zero numbers, non-empty string, logical conditions evaluating to true, and bitwise conditions evaluating to true</p>
+<p>The clause binded to the first <code>if</code> statement will execute if the condition evaulates to true. The condition will first be casted as a boolean. Expression/values that evaluate to true are: booleans that are true, non-zero numbers, non-empty string, logical conditions evaluating to true, and bitwise conditions evaluating to true</p>
 
 
 <b>Variables</b>
 <p>Declaring variable example:
-
 ```
 var x = 0;
 ```
 
 variables can be bounded to values or homogenous-typed expressions. Constants have been deprecated from Cocoa</p>
 <p>Assigning variables 
-
 ```
 var pi = 3.15; pi = 3.14159;
 ```
-
 </p>
 
 <b>Arrays</b>
 <p>
-
 ```
-var fib = [0,1,1,2,3,5,8]; var nthFib = fib[n];
+var fib = [0,1,1,2,3,5,8]; 
+var nthFib = fib[n];
 ```
-Arrays in Cocoa may handle non-homogenous type expressions. An array's size is fix upon declaration. An array may be indexed as given in the example above; array start at index 0. 
+Arrays in Cocoa may handle non-homogenous type expressions. An array's size is fix upon declaration. An array may be indexed as given in the example above; array start at index 0. Arrays have reference semantics, meaning modifications to the array that was given as an argument within a function will affect the original. 
 </p>
 <b>Functions</b>
-<p>Function declaration cannot be anonymous; they must be bound to a variable name. All functions are required to return at the end of the function body. Functions may take zero to multiple arugments. Functions return Null on void return-type functions. Function example: 
+<p>Function declaration cannot be anonymous; they must be bound to a variable name. All functions are required to return at the end of the function body. Functions may take zero to multiple arugments. Functions return <code>Null</code> on void return functions. Function example: 
 
 ```
 var f = function(x){
@@ -164,12 +159,32 @@ var f = function(x){
 };
 ```
 Calling function f: 
-
 ```
 f(1);
 ```
-
 </p>
+
+<p>Function are first-class data type, which allows Acorn to have higher-order functions.</p>
+<p>This example function squares the values in a array through mapping</p>
+```
+var map = function(f, l, length){
+  for(var i = 0; i<length; i=i+1){
+     l[i] = f(l[i]);
+  };
+};
+
+var square = function(x){
+  return x*x;
+};
+
+var image = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+map(square, image, 10);
+```
+<p>By mapping, values in the <code>image</code> array are squared, so elements in the image array are now.</p>
+```
+[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+```
 
 <b>Input</b>
 <p>Acorn accepts input from the stdin() function. 
@@ -178,7 +193,7 @@ f(1);
 var n = stdin();
 ```
 
-stdin() automatically infers the type of input. </p>
+<code>stdin()</code> automatically infers the type of input. </p>
 
 <b>For Loop</b>
 For loops in Cocoa require the following syntax. It must be given an initial value, followed by a condition, followed by an incrementer. Upon each call to the body, the incrermenter will be re-evalutated, and the condition will be check to determine if the body of the loop will execute again. 
@@ -201,7 +216,7 @@ for(var i = 0; i<10; i=i+1){
 var str = "I have "+3~>(String)+" apples."
 ```
 
-<p>Will evaulate to the string being, <code>I have 3.0 apples</code>.</p>
+<p>Will evaulate to the string being, <code>I have 3 apples</code>.</p>
 
 <b>For Each</b>
 <p>For loops in Acorn 1.1.1 has be demoted to <code>foreach</code> loops. Foreach loops should be taken advantage for speed when simple iterations are needed.</p>
@@ -214,7 +229,6 @@ foreach( i = 0 < 10 ){
 <p>A foreach loop initiates a local variable with the given name and accepts a given range composed of integers. Foreach loops may only handle < and <= conditions. </p>
 
 <b>Bug Fixes</b>
-<i>Individuals who find bugs with Acorn will recieve recognition below</i>
 <ul>
 <li>1.1 Fix string comparison giving false negatives during conditional checks.</li>
 <li>1.1.1 Fix strings being handled incorrectly when interpreted, which led to negatives during conditional checks.</li>
