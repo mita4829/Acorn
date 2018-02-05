@@ -144,10 +144,12 @@ var pi = 3.15; pi = 3.14159;
 
 <b>Arrays</b>
 <p>
+  
 ```
 var fib = [0,1,1,2,3,5,8]; 
 var nthFib = fib[n];
 ```
+
 Arrays in Cocoa may handle non-homogenous type expressions. An array's size is fix upon declaration. An array may be indexed as given in the example above; array start at index 0. Arrays have reference semantics, meaning modifications to the array that was given as an argument within a function will affect the original. 
 </p>
 <b>Functions</b>
@@ -158,7 +160,9 @@ var f = function(x){
   return 1+x;
 };
 ```
+
 Calling function f: 
+
 ```
 f(1);
 ```
@@ -166,6 +170,7 @@ f(1);
 
 <p>Function are first-class data type, which allows Acorn to have higher-order functions.</p>
 <p>This example function squares the values in a array through mapping</p>
+
 ```
 var map = function(f, l, length){
   for(var i = 0; i<length; i=i+1){
@@ -181,7 +186,9 @@ var image = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 map(square, image, 10);
 ```
+
 <p>By mapping, values in the <code>image</code> array are squared, so elements in the image array are now.</p>
+
 ```
 [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
 ```
