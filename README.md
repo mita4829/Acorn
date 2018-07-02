@@ -131,12 +131,14 @@ if(0){
 
 <b>Variables</b>
 <p>Declaring variable example:
+  
 ```
 var x = 0;
 ```
 
 variables can be bounded to values or homogenous-typed expressions. Constants have been deprecated from Cocoa</p>
 <p>Assigning variables 
+  
 ```
 var pi = 3.15; pi = 3.14159;
 ```
